@@ -3,6 +3,7 @@ import ddf.minim.*;
 
 Minim minim;
 AudioPlayer player;
+AudioPlayer iniciop;
 
 //Posiciones del coche macQueen
 int x= 220;
@@ -12,7 +13,7 @@ int y = 420;
 int puntuacion = 0;
 
 //Tiempo
-float tiempo = 30;
+float tiempo = 5;
 
 //Posiciones de las monedas
 int posXmonedaIzquierda = 123;
@@ -39,19 +40,22 @@ PImage pianoIz;
 PImage pianoDch;
 PImage moneda;
 PImage copa;
+PImage rayotriste;
 
 void setup() {
   
   //Cargamos el sonido
   minim = new Minim(this);
-  //sonido = new SoundFile(this,"musicote.wav");
+  player = minim.loadFile("musicote.wav");
+  iniciop = minim.loadFile("musicainicio.wav");
+
   inicio();
   size(500, 500);
 }
 
 //Metodo de la pantalla inicial
 void inicio() {
-
+  iniciop.play();
   pantallaInicio = loadImage("pantallaInicio.jpg");
   botonInicio = loadImage("start.png");
   titulo = loadImage("titulo.png");
@@ -120,9 +124,10 @@ void draw() {
 }
 
 void juego() {
-  
+    
+  iniciop.pause();
   //cargamos la musica
-  //player.play(1024);
+  player.play();
   
   //Cargamos las imagenes
   vehiculo = loadImage("vehiculo.png");
@@ -327,20 +332,26 @@ void moverMonedas() {
 
 //Pantalla de game over
 void gameOver() {
-
-  //player.pause();
+  
+  player.rewind();
   background(0);
   textSize(50);
+  fill(255,0,0);
   text("GAME OVER", 105, 200);
   textSize(25);
+  fill(255);
   text("Puntuación: " + puntuacion, 155, 250);
+  text("Click para volver a jugar", 100, 400);
+  
+  rayotriste = loadImage("triste.jpg");
+  image(rayotriste, 200,260,100,100);
   gameOver = true;
   tiempo = 30;
 }
 
 //Pantalla de premio especial
 void copaPiston() {
-
+  
   copa = loadImage("copapiston.jpg");
   image(copa, 0, 0, 500, 500);
   premio = true;
